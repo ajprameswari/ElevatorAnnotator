@@ -81,9 +81,9 @@ Here is a list of steps needed to assembly the prototype.
 - Connect other components to the Raspberry Pi ports and GPIO pins following these fritzing sketch as guides for both versions.
 - - With audio as input:
 ![fritzing_audio]
--- Connect the mini USB microphone to one of the USB ports.
--- Connect the audio plug terminal to the audio jack of the Raspberry pi as output for the speakers.
-- -  With buttons as input
+- Connect the mini USB microphone to one of the USB ports.
+- Connect the audio plug terminal to the audio jack of the Raspberry pi as output for the speakers.
+- - With buttons as input
 ![fritzing_button]
 - For both versions, connect HDMI to VGA cable to LCD for display, USB keyboard and mouse for input, and power supply, for development phase connect the plugged in power adapter to the micro USB ports and replace with powerbank.
 
@@ -155,22 +155,21 @@ And here is the workflow for the button as inputs version:
 - The prototype then put on standby mode again and waits for motion.
 
 Here is the structure and example of the registered annotation:
-| Variable | Remarks |
-| ------ | ------ |
-| **A**: timestamp | yyyymmdd-hh:mm:ss format |
-| **B**: number of participation answer attempts | max: 3 |
-| **C**: participation answer | YES/NO |
-| **D**: list of participation answer attempts | length: 3 - False/True |
-| **E**: selected song file | sound1-10 |
-| **F**: positions of the played fragment in percentage | 0.25/0.50/0.75 |
-| **G**: type of instrument to be annotated | trumpet/violin/piano |
-| **H**: number of instrument answer attempts | max: 3 |
-| **I**: instrument answer | YES/NO |
-| **J**: list of instrument answer attempts | length: 3 - False/True |
-| **K**: length of the annotation | in seconds |
+- **A**: timestamp - yyyymmdd-hh:mm:ss format 
+- **B**: number of participation answer attempts - max: 3 
+- **C**: participation answer - Yes/No 
+- **D**: list of participation answer attempts - length: 3 - False/True
+- **E**: selected song file - sound1-10
+- **F**: positions of the played fragment in percentage - 0.25/0.50/0.75
+- **G**: type of instrument to be annotated - trumpet/violin/piano
+- **H**: number of instrument answer attempts - max: 3
+- **I**: instrument answer - Yes/No
+- **J**: list of instrument answer attempts - length: 3 - False/True
+- **K**: length of the annotation - in seconds
+
 Example:
 ```
-A                   B   C   D   E       F       G       H   I   J   K
+A                       B       C       D       E       F       G       H       I       J       K
 20170517-11:53:47	1	YES	T	sound9	0.25	trumpet	2	YES	FT	38.0137310028
 ```
 
