@@ -173,6 +173,10 @@ A                       B       C       D       E       F       G       H       
 20170517-11:53:47	1	YES	T	sound9	0.25	trumpet	2	YES	FT	38.0137310028
 ```
 
+A video for demo purposes of how the setup looked like for the experiment can be seen on Youtube through the embedded link below:
+[![Elevator Annotator Demo](https://raw.githubusercontent.com/ajprameswari/ElevatorAnnotator/master/Resources/Images/demo_button_thumbnail.PNG)](https://youtu.be/NL-0eTiFJV8 "Elevator Annotator Demo")
+
+
 ## Authors
 
 This project is a written and developed by Anggarda Prameswari as a master student in Information Science of Vrije University Amsterdam with the help and guidance of both supervisors: 
