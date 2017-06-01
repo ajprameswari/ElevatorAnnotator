@@ -12,27 +12,16 @@ from threading import Timer
 import thread, sys
 from mutagen.mp3 import MP3
 from mutagen.asf import ASF
-
 import RPi.GPIO as GPIO
-#import time
 import os
-import annotatorVoice2
-
-#import time
 import Adafruit_CharLCD as LCD
-
 import picamera
 from gpiozero import MotionSensor
-
-import timeout_decorator
 
 ## Initialize board and GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 PIR_PIN = 16
-#LED_PIN = 22
-#GPIO.setup(LED_PIN, GPIO.OUT)
-#GPIO.setup(PIR_PIN, GPIO.IN)
 pir = MotionSensor(16) 
 
 # LCD pin configuration:
@@ -60,34 +49,16 @@ musicNo = str(random.randrange(1,11))
 instruNo = random.randrange(0,3)
 positionNo = [0.25, 0.5, 0.75]
 seek = random.choice(positionNo)
-#seek = random.uniform(0,1)
 instruments =['violin','trumpet','piano']
-#~ driver_mic = 'QuickCam'
-    #~ index = pyaudio.PyAudio().get_device_count()
-    #~ mic = ''
-    #~ for i in range(index):
-        #~ if (driver_mic in pyaudio.PyAudio().get_device_info_by_index(i).get('name')):
-            #~ mic = int(i)
-            #~ break
 
 ## Record variables
 record = ""
-#time_start = datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d-%H:%M:%S') #20170217-16:49:05
 participationAns = ""
 participationAttempts_list = []*2
 musicName = ""
 instrumentName = ""
 instrumentAns = ""
 instrumentAttempts_list = []*2
-
-class TimerMicError(ValueError):
-	'''raise this when there's a value error for my app'''
-
-#@timeout_decorator.timeout(5, timeout_exception=StopIteration)
-def timerMic():
-	print ("Timer reached")
-	#return None
-	raise TimerMicError('timeout is reached and its not ok')
 
 ## Answers' handling functions
 def repeatAgain():
@@ -168,8 +139,6 @@ def registerRecord(ansType,ans):
     meta.close()
     camera.capture('/home/pi/Documents/ElevatorAnnotator/images/img_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H-%M-%S') + '.jpg')
     time.sleep(5)
-
-
 
 def handleOtherInstrumentAnswer():
     answer = repeatAgain()
@@ -256,42 +225,16 @@ def setDelay(audioType,no):
 
 def recogniseMe(mic):
     r = sr.Recognizer()
-    #r.dynamic_energy_treshold = False
-    #r.energy_treshold = 500
-    #print('Minimum energy threshold: {}'.format(r.energy_threshold))
-    #Play(getAudio("beep", 5), 0)
-    #setDelay("beep", 5)
-    #print("Say something!")
-    #lcd.clear()
-    #lcd.message('Speak now. Answer\nonly once YES/NO')
-    
-    #with sr.Microphone(mic, sample_rate=44100) as source:
-        #r.dynamic_energy_treshold = False
-        #r.energy_treshold = 500
-        ##r.adjust_for_ambient_noise(source, duration=1)
-        ##r.pause_treshold = 6
-        #print('Minimum energy threshold: {}'.format(r.energy_threshold))
-        #Play(getAudio("beep", 5), 0)
-        #setDelay("beep", 5)
-        #print("Say something!")
-        #lcd.clear()
-        #lcd.message('Speak now. Answer\nonly once YES/NO')
-        
 
     try:
 		with sr.Microphone(mic, sample_rate=44100) as source:
 			r.dynamic_energy_treshold = False
 			r.energy_treshold = 4000
-			#r.adjust_for_ambient_noise(source, duration=1)
-			#r.pause_treshold = 5
-			#print('Minimum energy threshold: {}'.format(r.energy_threshold))
 			Play(getAudio("beep", 5), 0)
 			setDelay("beep", 5)
 			print("Say something!")
 			lcd.clear()
 			lcd.message('Speak now. Answer\nonly once YES/NO')
-			#t = threading.Timer(10.0, timerMic)
-			#t.start()
 			audio = r.listen(source)
 			answer=str(r.recognize_sphinx(audio))
 			print("Sphinx thinks you said " + answer)
@@ -305,17 +248,10 @@ def recogniseMe(mic):
     except sr.RequestError:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
         return None
-    #except TimerMicError:
-#		print("Reached timeout error")	
-#		return answer == None
-	#except:
-	#	print("TimeoutMicError reached") 
-#		return None
-
+  
     #finally:
 	#	with open('/home/pi/Documents/ElevatorAnnotator/recordings/audio_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H-%M-%S') + '.wav', "wb") as f:
 	#		f.write(audio.get_wav_data())
-	#	t.cancel()
 
 def Play(sound,delay):
     p = vlc.MediaPlayer(sound)
@@ -364,18 +300,8 @@ def startVoiceAnnotation():
 	meta.write(log)
 	meta.close()
 	
-	#driver_mic = 'USB PnP Sound Devic'
-	#index = pyaudio.PyAudio().get_device_count()
 	global mic
 	mic = 0
-	#for i in range(index):
-	#	if (driver_mic in pyaudio.PyAudio().get_device_info_by_index(i).get('name')):
-	#		mic = int(i)
-	#		break
-
-	#Play(getAudio("beep", 5), 0)
-	#setDelay("beep", 5)
-
 	playMusic()
 
 	print (">> Play hello" + helloNo)
@@ -410,7 +336,7 @@ def startVoiceAnnotation():
 			registerRecord("participation","no")
 			return 0
 		else:
-			if (participationAttempt == 3): #and ((participationAnswer != "yes") or (participationAnswer != "no")):
+			if (participationAttempt == 3):
 				time.sleep(0.5)
 				Play(getAudio("beep", 2), 0)
 				setDelay("beep", 2)
@@ -422,12 +348,6 @@ def startVoiceAnnotation():
 				break
 			else:
 				pass
-		#except Exception:
-		#	print "Answer: " + participationAnswer
-		#	print ">> Got an Exception" + str(Exception)
-		#	Play(getAudio("repeat",repeatNo),0)
-		#	setDelay("repeat",repeatNo)
-		#	participationAnswer = recogniseMe(mic)
 
 	print (">> Play instrument: " + instruments[instruNo])
 	Play(getAudio("instrument",instruNo),0)
@@ -449,7 +369,7 @@ def startVoiceAnnotation():
 				handleNoAnswer("instrument")
 				return 0
 			else:
-				if (instrumentAttempt == 3): #and ((instrumentAnswer != "yes") or (instrumentAnswer != "no")) :
+				if (instrumentAttempt == 3):
 					time.sleep(0.5)
 					Play(getAudio("beep", 2), 0)
 					setDelay("beep", 2)
@@ -457,52 +377,16 @@ def startVoiceAnnotation():
 					print ("Instrument attempts exceeded")
 					registerNoInstrument()
 					return 0
-				#handleOtherInstrumentAnswer()
 			instrumentAttempt += 1
 		except Exception:
 			print (">> Got an Exception" + str(Exception))
 			Play(getAudio("repeat", repeatNo), 0)
 			setDelay("repeat", repeatNo)
 
-def startButtonAnnotation():
-	pass
-
-##def blinkLED():
-##    print ">> LED blinks"
-##    GPIO.output(LED_PIN,GPIO.HIGH)
-##    time.sleep(1)
-##    GPIO.output(LED_PIN,GPIO.LOW)
-##    time.sleep(1)
-##    GPIO.output(LED_PIN,GPIO.HIGH)
-##    time.sleep(1)
-##    GPIO.output(LED_PIN,GPIO.LOW)
-##    time.sleep(1)
-
-
-##def MOTION2(PIR_PIN):
-##	print ">> Entered MOTION2"
-##	blinkLED()
-##	while True:
-##		input_yes = GPIO.input(YES_PIN)
-##		input_no = GPIO.input(NO_PIN)
-##		if input_yes == False:
-##			print ("YES is pressed")
-##			while input_yes == False:
-##				input_yes = GPIO.input(YES_PIN)	
-##		elif input_no == False:
-##			print ("NO is pressed")
-##			while input_no == False:
-##				input_no = GPIO.input(NO_PIN)
-	#log2 = time_start + '\t' + "Annotation is executed" + '\n'
-	#meta = open('/home/pi/Documents/ElevatorAnnotator/motionLog.tsv','a')
-	#meta.write(log2)
-	#meta.close()
-
 def MOTION(PIR_PIN):
     print (">> Motion Detected!")
     lcd.clear()
     lcd.message('Hello there :)')
-    #blinkLED()
     with open("/home/pi/Documents/ElevatorAnnotator/hello.txt", "w") as outfile:
 		outfile.write("hello")
     print (">> Execute annotation script")
@@ -519,18 +403,10 @@ def main():
 		pir.wait_for_motion()
 		MOTION(16)
 		pir.wait_for_no_motion()
-	#try:
-	#	GPIO.add_event_detect(PIR_PIN, GPIO.RISING, callback=MOTION)
-	#	while 1:
-	#		time.sleep(100)      
-	#except KeyboardInterrupt:
-	#	print ">> Interrupted. Quiting system"
-	#	GPIO.cleanup()	
 
 if __name__ == '__main__':
 	lcd.clear()
 	time.sleep(2)
 	print (">> Board is ready")
-	#lcd.clear()
 	lcd.message('Board is ready')
 	main()
